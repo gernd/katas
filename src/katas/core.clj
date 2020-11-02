@@ -1,4 +1,4 @@
-(ns katas-lein.core)
+(ns katas.core)
 
 (defn foo
   "I don't do a whole lot."
