@@ -2,6 +2,8 @@
   "Source: https://github.com/ardalis/kata-catalog/blob/master/katas/RPG%20Combat.md"
   )
 
+; so far: iteration 1
+
 (defn create-character []
   {:health 1000
    :level  1
