@@ -14,3 +14,6 @@ pom.xml.asc
 .cpcache/
 .idea
 *.iml
+
+# emacs files
+.lsp/*
