@@ -1,11 +1,12 @@
 (ns katas.aoc.2020.day2
-  (:require [katas.aoc.util :as util]
+  (:require [clojure.string :as s]
+            [clojure.test :refer :all]
             [clojure.tools.trace :refer :all]
-            [clojure.string :as s]
-            [clojure.test :refer :all]))
+            [katas.aoc.util :as util]))
 
 (def first-password-line "1-3 a: abcde")
 (def second-password-line "1-3 b: cdefg")
+(def third-password-line "2-9 c: ccccccccc")
 
 (defn string->char [string]
   (.charAt string 0))
@@ -36,7 +37,7 @@
     (is (= {:spec {:min 1 :max 3 :char \a} :password "abcde"}
            (parse-password-line-part-1 "1-3 a: abcde")))))
 
-(deftrace validate-line [password-line]
+(defn validate-line-part-1 [password-line]
   (let [{:keys [spec password]} (parse-password-line-part-1 password-line)
         char-frequencies-in-password (->> password frequencies (merge-with + {(:char spec) 0}))
         char-occurence-in-password (get char-frequencies-in-password (:char spec))]
@@ -45,6 +46,30 @@
 
 (defn solve-part-1 []
   (->> (util/load-file-from-resources-lines-as-string-coll! "aoc/2020/day2-input.txt")
-       (map validate-line)
+       (map validate-line-part-1)
        (filter true?)
        count))
+
+(defn parse-password-spec-part-2
+  "Parses a password spec for part 2"
+  [spec-string]
+  (let [[position-string char-string] (s/split spec-string #" ")
+        [first-pos second-pos] (s/split position-string #"-")]
+    {:first-pos (Integer/parseInt first-pos) :second-pos (Integer/parseInt second-pos) :char (string->char char-string)}))
+
+(def parse-password-line-part-2 (partial parse-password-line parse-password-spec-part-2))
+
+(parse-password-line-part-2 first-password-line)
+
+(defn validate-line-part-2 [password-line]
+  (let [{:keys [spec password]} (parse-password-line-part-2 password-line)
+        char-to-check (:char spec)
+        char-at-first-pos (get password (- (:first-pos spec) 1))
+        char-at-second-pos (get password (- (:second-pos spec) 1))]
+    (or
+     (and (= char-to-check char-at-first-pos) (not= char-to-check char-at-second-pos))
+     (and (= char-to-check char-at-second-pos) (not= char-to-check char-at-first-pos)))))
+
+
+
+
