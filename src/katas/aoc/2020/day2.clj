@@ -71,5 +71,8 @@
      (and (= char-to-check char-at-second-pos) (not= char-to-check char-at-first-pos)))))
 
 
-
-
+(defn solve-part-2 []
+  (->> (util/load-file-from-resources-lines-as-string-coll! "aoc/2020/day2-input.txt")
+       (map validate-line-part-2)
+       (filter true?)
+       count))
