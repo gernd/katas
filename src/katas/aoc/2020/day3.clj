@@ -57,6 +57,8 @@
               all-coordinates (conj coordinates coordinate-row-for-input)]
               (recur all-coordinates (rest remaining-input) (inc current-y-position))))))
 
+(def test-landscape-coordinates (landscape-input->landscape-coordinates test-landscape-input))
+
 (deftest test-landscape-input->landscape-coordinates
   (testing "empty input results in empty set"
     (is (= () (landscape-input->landscape-coordinates [])))))
