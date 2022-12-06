@@ -29,24 +29,32 @@
     (update current-state :current-coll conj line)))
 
 (defn string-collection-with-separator-lines->collection-of-string-colls
-  [string-collections-with-separator-lines]
-  (-> (reduce update-collection-parse-state {:collections '[] :current-coll '[]} string-collections-with-separator-lines)
-      :collections
-      seq))
+  "Can handle both string collections with and without a final empty string"
+  [string-collection-with-separator-lines]
+  (let  [normalized-collection (if (not= "" (last string-collection-with-separator-lines))
+                                 (concat string-collection-with-separator-lines [""])
+                                 string-collection-with-separator-lines)]
+    (-> (reduce update-collection-parse-state {:collections '[] :current-coll '[]} normalized-collection)
+        :collections
+        seq))
+  )
 
 (deftest test-string-collection-with-separator-lines->collection-of-string-colls
-  (testing "empty-collection results in empty collection"
-    (is (empty?
-         (string-collection-with-separator-lines->collection-of-string-colls '()))))
-
+  (testing "empty-collection results in collection containing an empty vector"
+    (is (= '([])
+           (string-collection-with-separator-lines->collection-of-string-colls '()))))
   (testing "Collection with one separator parsed into one collection"
     (is (=
          '(["23123" "999" "1"])
          (string-collection-with-separator-lines->collection-of-string-colls '("23123" "999" "1" "")))))
-  (testing "Collection with two separator lines parsed into two collections"
+  (testing "Collection with two separator lines and a traling newline parsed into two collections"
     (is (=
          '(["a" "b" "c"] ["99" "20b" "dog"])
-         (string-collection-with-separator-lines->collection-of-string-colls '("a" "b" "c" "" "99" "20b" "dog" ""))))))
+         (string-collection-with-separator-lines->collection-of-string-colls '("a" "b" "c" "" "99" "20b" "dog" "")))))
+  (testing "Collection with two separator lines and no trailing newline parsed into two collections"
+    (is (=
+         '(["a" "b" "c"] ["99" "20b" "dog"])
+         (string-collection-with-separator-lines->collection-of-string-colls '("a" "b" "c" "" "99" "20b" "dog"))))))
 
 (defn load-file-with-blank-lines-separators-as-collections!
   "Loads the given resource file with several entries separated by blank lines"
