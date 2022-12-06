@@ -38,7 +38,7 @@
    (and (<= section-1-min section-2-max) (<= section-2-max section-1-max)))))
 
 (defn solve-day4-part-2 []
-  (->> (Util/load-file-from-resources-lines-as-string-coll! "aoc/2022/day4-input.txt")
+  (->> (util/load-file-from-resources-lines-as-string-coll! "aoc/2022/day4-input.txt")
        (map section-line->sections)
        (filter #(or (sections-overlap? %) (full-containment-present? %) ))
        count))

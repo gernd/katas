@@ -63,7 +63,6 @@
         (assoc index-from new-from-stack-state)
         (assoc index-to new-to-stack-state))))
 
-
 (def apply-command-for-crane-9000 (partial apply-crane-command reverse))
 (def apply-command-for-crane-9001 (partial apply-crane-command identity))
 
@@ -72,7 +71,13 @@
         initial-crate-stacks (crate-stacks-input->crate-stacks crates-input)
         crane-commands (map crane-command-input->crane-command crane-commands-inputs)]
     (->> (reduce apply-command-for-crane-9000 initial-crate-stacks crane-commands)
-    (map last)
-    (apply str)
-    )))
+         (map last)
+         (apply str))))
 
+(defn solve-day-5-part-2 []
+  (let [[crates-input crane-commands-inputs] (util/load-file-with-blank-lines-separators-as-collections! "aoc/2022/day5-input.txt")
+        initial-crate-stacks (crate-stacks-input->crate-stacks crates-input)
+        crane-commands (map crane-command-input->crane-command crane-commands-inputs)]
+    (->> (reduce apply-command-for-crane-9001 initial-crate-stacks crane-commands)
+         (map last)
+         (apply str))))
