@@ -40,15 +40,6 @@
 (def update-state-start-of-packet-marker (partial update-state update-start-of-packet-fifo is-start-of-packet-marker?))
 (def update-state-start-of-message-marker (partial update-state update-start-of-message-fifo is-start-of-message-marker?))
 
-(comment defn update-state-start-of-packet-marker [current-state next-char]
-  (if (not (nil? (:position-for-first-marker current-state))) current-state
-      (let [new-chars (update-start-of-packet-fifo (:last-chars current-state) next-char)
-            new-position (inc (:current-pos current-state))]
-        (cond-> current-state
-          true (assoc :current-pos new-position)
-          true (assoc :last-chars new-chars)
-          (is-start-of-packet-marker? new-chars) (assoc :position-for-first-marker new-position)))))
-
 (defn compute-position-for-first-marker [update-state-fn datastream]
          (->> datastream
               (reduce update-state-fn initial-state)
