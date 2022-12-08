@@ -48,11 +48,6 @@
 (def compute-position-for-first-start-of-packet-marker (partial compute-position-for-first-marker update-state-start-of-packet-marker))
 (def compute-position-for-first-start-of-message-marker (partial compute-position-for-first-marker update-state-start-of-message-marker))
 
-(comment defn compute-position-for-first-start-of-packet-marker [datastream]
-  (->> datastream
-       (reduce update-state-start-of-packet-marker initial-state)
-       (:position-for-first-marker)))
-
 (defn solve-day-6-part-1 []
   (->> (util/load-file-from-resources-as-string! "aoc/2022/day6-input.txt")
        (compute-position-for-first-start-of-packet-marker)))
