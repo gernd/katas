@@ -41,9 +41,9 @@
 (def update-state-start-of-message-marker (partial update-state update-start-of-message-fifo is-start-of-message-marker?))
 
 (defn compute-position-for-first-marker [update-state-fn datastream]
-         (->> datastream
-              (reduce update-state-fn initial-state)
-              (:position-for-first-marker)))
+  (->> datastream
+       (reduce update-state-fn initial-state)
+       (:position-for-first-marker)))
 
 (def compute-position-for-first-start-of-packet-marker (partial compute-position-for-first-marker update-state-start-of-packet-marker))
 (def compute-position-for-first-start-of-message-marker (partial compute-position-for-first-marker update-state-start-of-message-marker))
